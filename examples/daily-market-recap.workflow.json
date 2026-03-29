@@ -1,0 +1,48 @@
+{
+  "name": "Daily Market Recap",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days"
+            }
+          ]
+        }
+      },
+      "id": "1",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [260, 300]
+    },
+    {
+      "parameters": {
+        "operation": "getTrendingStocks",
+        "source": "reddit",
+        "trendingDays": 1,
+        "limit": 10,
+        "assetType": "stock"
+      },
+      "id": "2",
+      "name": "Market Sentiment",
+      "type": "n8n-nodes-market-sentiment.marketSentiment",
+      "typeVersion": 1,
+      "position": [540, 300]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Market Sentiment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

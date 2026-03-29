@@ -1,0 +1,53 @@
+{
+  "name": "n8n-nodes-market-sentiment",
+  "version": "0.1.0",
+  "description": "n8n community node for Adanos market sentiment data",
+  "license": "MIT",
+  "homepage": "https://adanos.org/reddit-stock-sentiment",
+  "bugs": {
+    "url": "https://github.com/adanos-software/n8n-nodes-market-sentiment/issues"
+  },
+  "author": {
+    "name": "Adanos",
+    "url": "https://adanos.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adanos-software/n8n-nodes-market-sentiment.git"
+  },
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "stocks",
+    "sentiment",
+    "finance",
+    "adanos"
+  ],
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node ./scripts/copy-assets.mjs && node ./scripts/verify-build.mjs",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/AdanosApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/MarketSentiment/MarketSentiment.node.js"
+    ]
+  },
+  "peerDependencies": {
+    "n8n-workflow": ">=1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.2.0",
+    "n8n-workflow": "^2.13.1",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}
