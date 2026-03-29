@@ -9,6 +9,12 @@ It is built for finance automations that need usable outputs instead of raw post
 - build daily market recap and newsletter workflows
 - compare names like `NVDA`, `AMD`, `TSLA`, or `PLTR` before the open
 
+## What it looks like in n8n
+
+Real editor run with the `Enrich Incoming Items` operation on a live watchlist:
+
+![n8n Market Sentiment runtime validation](./docs/runtime-validation.png)
+
 ## What the node does
 
 The package exposes a single `Market Sentiment` node with three operations:
