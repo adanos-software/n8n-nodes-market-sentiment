@@ -7,6 +7,35 @@
 - run `npm run build`
 - run `python3 -m pytest /Users/alexschneider/Documents/Privat/Reddit-Sentiment/tests/test_n8n_market_sentiment_node_package.py -q`
 
+## One-time setup
+
+Before the first npm release:
+
+1. create the package on npm by publishing once through the repo workflow
+2. configure npm Trusted Publisher for:
+   - owner: `adanos-software`
+   - repo: `n8n-nodes-market-sentiment`
+   - workflow: `.github/workflows/publish.yml`
+3. confirm the package name `n8n-nodes-market-sentiment` is still free or already owned by Adanos
+
+The publish workflow is tag-driven and uses npm provenance.
+
+## Release flow
+
+1. make sure `package.json` version is correct
+2. push the version bump to `main`
+3. create and push a matching Git tag:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+4. wait for `.github/workflows/publish.yml` to pass
+5. verify the package on npm
+
+The workflow refuses to publish if the Git tag does not match `package.json` exactly.
+
 ## Runtime validation
 
 Minimum smoke test inside a real n8n instance:
@@ -41,6 +70,7 @@ Look for:
 ## npm package
 
 - confirm `package.json` version
+- confirm `publishConfig.access` is `public`
 - confirm `files` only ships `dist`
 - confirm `dist/index.js` exists after build
 - confirm `dist/nodes/MarketSentiment/marketSentiment.svg` exists after build

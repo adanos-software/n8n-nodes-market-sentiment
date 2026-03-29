@@ -186,3 +186,16 @@ npm run build
 ```
 
 Release and submission notes live in [docs/RELEASE_CHECKLIST.md](./docs/RELEASE_CHECKLIST.md).
+
+## Maintainer release flow
+
+This repo publishes from Git tags through [`.github/workflows/publish.yml`](./.github/workflows/publish.yml).
+
+Release steps:
+
+1. bump `package.json` to the target version
+2. push `main`
+3. create and push the matching tag, for example `v0.1.0`
+4. let GitHub Actions run `npm publish --provenance --access public`
+
+The publish workflow fails if the pushed tag does not match `package.json` exactly.

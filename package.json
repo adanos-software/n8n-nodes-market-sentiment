@@ -24,6 +24,9 @@
     "adanos"
   ],
   "main": "dist/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "dist"
   ],
