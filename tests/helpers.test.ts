@@ -1,18 +1,17 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+	ADANOS_API_BASE_URL,
 	buildSnapshotResult,
 	combineSnapshotsByTicker,
 	extractStockRows,
-	normalizeBaseUrl,
 	normalizeCompareRows,
 	parseTickerList,
 } from '../nodes/MarketSentiment/helpers';
 
 describe('Market Sentiment helpers', () => {
-	it('normalizes base urls and removes trailing slashes', () => {
-		expect(normalizeBaseUrl('https://api.adanos.org/')).toBe('https://api.adanos.org');
-		expect(normalizeBaseUrl(undefined)).toBe('https://api.adanos.org');
+	it('uses the fixed Adanos API base url', () => {
+		expect(ADANOS_API_BASE_URL).toBe('https://api.adanos.org');
 	});
 
 	it('parses unique uppercase tickers', () => {

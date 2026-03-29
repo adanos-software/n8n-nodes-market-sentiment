@@ -42,8 +42,8 @@ Get an API key:
 The node uses a single credential:
 
 - `API Key`
-- `Base URL`
-  defaults to `https://api.adanos.org`
+
+The node always talks to the official Adanos API at `https://api.adanos.org`.
 
 ## Operation guide
 

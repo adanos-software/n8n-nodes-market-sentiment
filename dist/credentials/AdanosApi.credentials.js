@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdanosApi = void 0;
+const ADANOS_API_BASE_URL = 'https://api.adanos.org';
 class AdanosApi {
     constructor() {
         this.name = 'adanosApi';
@@ -18,14 +19,6 @@ class AdanosApi {
                 required: true,
                 description: 'API key for Adanos market sentiment endpoints',
             },
-            {
-                displayName: 'Base URL',
-                name: 'baseUrl',
-                type: 'string',
-                default: 'https://api.adanos.org',
-                required: true,
-                description: 'Override only for self-hosted or local API environments',
-            },
         ];
         this.authenticate = {
             type: 'generic',
@@ -37,7 +30,7 @@ class AdanosApi {
         };
         this.test = {
             request: {
-                baseURL: '={{$credentials.baseUrl}}',
+                baseURL: ADANOS_API_BASE_URL,
                 url: '/reddit/stocks/v1/health',
                 method: 'GET',
             },

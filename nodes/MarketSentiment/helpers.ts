@@ -1,4 +1,5 @@
 export const SUPPORTED_SOURCES = ['reddit', 'x', 'news', 'polymarket'] as const;
+export const ADANOS_API_BASE_URL = 'https://api.adanos.org';
 
 export type AdanosSource = (typeof SUPPORTED_SOURCES)[number];
 
@@ -64,11 +65,6 @@ const SOURCE_LABELS: Record<AdanosSource, string> = {
 	news: 'Finance News',
 	polymarket: 'Polymarket',
 };
-
-export function normalizeBaseUrl(baseUrl?: string): string {
-	const normalized = (baseUrl || 'https://api.adanos.org').trim();
-	return normalized.replace(/\/+$/, '');
-}
 
 export function parseTickerList(rawTickers: string): string[] {
 	const seen = new Set<string>();

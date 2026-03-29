@@ -20,11 +20,10 @@ async function getTrendingRows(context, itemIndex, source, days, limit, offset, 
     return (0, helpers_1.extractStockRows)(response);
 }
 async function adanosGet(context, itemIndex, path, qs) {
-    const credentials = await context.getCredentials('adanosApi', itemIndex);
-    const baseUrl = (0, helpers_1.normalizeBaseUrl)(credentials.baseUrl);
+    await context.getCredentials('adanosApi', itemIndex);
     return context.helpers.httpRequestWithAuthentication.call(context, 'adanosApi', {
         method: 'GET',
-        url: `${baseUrl}${path}`,
+        url: `${helpers_1.ADANOS_API_BASE_URL}${path}`,
         qs,
         json: true,
     });

@@ -1,5 +1,7 @@
 import type { ICredentialType, INodeProperties } from 'n8n-workflow';
 
+const ADANOS_API_BASE_URL = 'https://api.adanos.org';
+
 export class AdanosApi implements ICredentialType {
 	name = 'adanosApi';
 
@@ -19,14 +21,6 @@ export class AdanosApi implements ICredentialType {
 			required: true,
 			description: 'API key for Adanos market sentiment endpoints',
 		},
-		{
-			displayName: 'Base URL',
-			name: 'baseUrl',
-			type: 'string',
-			default: 'https://api.adanos.org',
-			required: true,
-			description: 'Override only for self-hosted or local API environments',
-		},
 	];
 
 	authenticate = {
@@ -40,7 +34,7 @@ export class AdanosApi implements ICredentialType {
 
 	test = {
 		request: {
-			baseURL: '={{$credentials.baseUrl}}',
+			baseURL: ADANOS_API_BASE_URL,
 			url: '/reddit/stocks/v1/health',
 			method: 'GET' as const,
 		},

@@ -1,23 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SUPPORTED_SOURCES = void 0;
-exports.normalizeBaseUrl = normalizeBaseUrl;
+exports.ADANOS_API_BASE_URL = exports.SUPPORTED_SOURCES = void 0;
 exports.parseTickerList = parseTickerList;
 exports.extractStockRows = extractStockRows;
 exports.normalizeCompareRows = normalizeCompareRows;
 exports.combineSnapshotsByTicker = combineSnapshotsByTicker;
 exports.buildSnapshotResult = buildSnapshotResult;
 exports.SUPPORTED_SOURCES = ['reddit', 'x', 'news', 'polymarket'];
+exports.ADANOS_API_BASE_URL = 'https://api.adanos.org';
 const SOURCE_LABELS = {
     reddit: 'Reddit',
     x: 'X.com',
     news: 'Finance News',
     polymarket: 'Polymarket',
 };
-function normalizeBaseUrl(baseUrl) {
-    const normalized = (baseUrl || 'https://api.adanos.org').trim();
-    return normalized.replace(/\/+$/, '');
-}
 function parseTickerList(rawTickers) {
     const seen = new Set();
     const tickers = rawTickers

@@ -1,6 +1,6 @@
 import type { IDataObject, IExecuteFunctions } from 'n8n-workflow';
 
-import { extractStockRows, normalizeBaseUrl, type AdanosSource, type SourceRow } from './helpers';
+import { ADANOS_API_BASE_URL, extractStockRows, type AdanosSource, type SourceRow } from './helpers';
 
 export async function getSourceCompareRows(
 	context: IExecuteFunctions,
@@ -42,15 +42,14 @@ async function adanosGet(
 	path: string,
 	qs: IDataObject,
 ): Promise<unknown> {
-	const credentials = await context.getCredentials('adanosApi', itemIndex);
-	const baseUrl = normalizeBaseUrl(credentials.baseUrl as string | undefined);
+	await context.getCredentials('adanosApi', itemIndex);
 
 	return context.helpers.httpRequestWithAuthentication.call(
 		context,
 		'adanosApi',
 		{
 			method: 'GET',
-			url: `${baseUrl}${path}`,
+			url: `${ADANOS_API_BASE_URL}${path}`,
 			qs,
 			json: true,
 		},
