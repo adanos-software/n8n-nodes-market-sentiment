@@ -1,9 +1,9 @@
 {
   "name": "n8n-nodes-market-sentiment",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "n8n community node for Adanos market sentiment data",
   "license": "MIT",
-  "homepage": "https://adanos.org/reddit-stock-sentiment",
+  "homepage": "https://adanos.org",
   "bugs": {
     "url": "https://github.com/adanos-software/n8n-nodes-market-sentiment/issues"
   },
