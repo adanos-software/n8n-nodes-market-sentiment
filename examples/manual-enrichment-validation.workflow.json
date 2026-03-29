@@ -1,0 +1,67 @@
+{
+  "name": "Manual Enrichment Validation",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "1",
+      "name": "When clicking \"Test workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "return ['AAPL', 'NVDA', 'PLTR', 'TSLA'].map((symbol) => ({ json: { symbol } }));"
+      },
+      "id": "2",
+      "name": "Seed Watchlist",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [430, 300]
+    },
+    {
+      "parameters": {
+        "operation": "enrichIncomingItems",
+        "tickerField": "symbol",
+        "targetField": "marketSentiment",
+        "days": 7,
+        "sources": [
+          "reddit",
+          "x",
+          "news"
+        ],
+        "includeSources": true
+      },
+      "id": "3",
+      "name": "Market Sentiment",
+      "type": "n8n-nodes-market-sentiment.marketSentiment",
+      "typeVersion": 1,
+      "position": [710, 300]
+    }
+  ],
+  "connections": {
+    "When clicking \"Test workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Seed Watchlist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Seed Watchlist": {
+      "main": [
+        [
+          {
+            "node": "Market Sentiment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

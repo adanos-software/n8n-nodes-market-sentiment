@@ -1,109 +1,173 @@
 # n8n Market Sentiment Node
 
-`n8n-nodes-market-sentiment` is a community node for [n8n](https://github.com/n8n-io/n8n) that brings Adanos market sentiment data into automation workflows.
+`n8n-nodes-market-sentiment` brings structured stock sentiment data from Adanos into n8n workflows.
 
-It is designed for practical finance automations:
+It is built for finance automations that need usable outputs instead of raw posts:
 
-- enrich stock watchlists from Google Sheets, Airtable, or Notion
-- send Slack or Discord alerts when sentiment spikes
-- build daily market recap workflows
-- generate newsletter snippets from trending stocks
+- enrich a watchlist from Google Sheets, Airtable, or Notion
+- send Slack or Discord alerts when a ticker gets unusually hot
+- build daily market recap and newsletter workflows
+- compare names like `NVDA`, `AMD`, `TSLA`, or `PLTR` before the open
 
-## Install in n8n
+## What the node does
 
-1. Open `Settings -> Community Nodes`.
-2. Install `n8n-nodes-market-sentiment`.
-3. Create an `Adanos API` credential with your API key.
-4. Add the `Market Sentiment` node to your workflow.
+The package exposes a single `Market Sentiment` node with three operations:
 
-Get an API key:
+| Operation | Best for | Output |
+| --- | --- | --- |
+| `Get Stock Snapshot` | multi-ticker scans | combined or per-source sentiment snapshots |
+| `Get Trending Stocks` | source-specific movers | one item per trending ticker |
+| `Enrich Incoming Items` | watchlists and downstream routing | original items plus nested sentiment data |
 
-- [https://adanos.org/reddit-stock-sentiment#api-form](https://adanos.org/reddit-stock-sentiment#api-form)
-
-## Supported sources
+Supported sources:
 
 - `reddit`
 - `x`
 - `news`
 - `polymarket`
 
-## Operations
+## Install in n8n
+
+1. Open `Settings -> Community Nodes`.
+2. Install `n8n-nodes-market-sentiment`.
+3. Create an `Adanos API` credential.
+4. Add the `Market Sentiment` node to your workflow.
+
+Get an API key:
+
+- [https://adanos.org/reddit-stock-sentiment#api-form](https://adanos.org/reddit-stock-sentiment#api-form)
+
+## Credential
+
+The node uses a single credential:
+
+- `API Key`
+- `Base URL`
+  defaults to `https://api.adanos.org`
+
+## Operation guide
 
 ### 1. Get Stock Snapshot
 
-Fetch combined or per-source sentiment snapshots for one or more tickers.
+Use this for pre-market scans, manual comparisons, and one-shot ticker lookups.
 
 Inputs:
 
-- `tickers`: comma-separated stock tickers such as `AAPL,NVDA,TSLA`
+- `tickers`: comma-separated list like `AAPL,NVDA,TSLA`
 - `sources`: any mix of `reddit`, `x`, `news`, `polymarket`
-- `days`: 1 to 90
-- `outputMode`:
-  - `combined`: one item per ticker with averaged metrics and source alignment
-  - `perSource`: one item per ticker/source pair
-  - `raw`: one item with the raw source payloads
+- `days`: lookback window, `1` to `90`
+- `outputMode`
+  - `combined`: one row per ticker with averaged metrics and source alignment
+  - `perSource`: one row per ticker/source pair
+  - `raw`: raw source payloads grouped into one result item
 
 ### 2. Get Trending Stocks
 
-Fetch the current trending stocks for a single source.
+Use this for “what is moving right now?” workflows.
 
 Inputs:
 
 - `source`: `reddit`, `x`, `news`, or `polymarket`
-- `days`: 1 to 90
-- `limit`: 1 to 100
+- `days`: lookback window, `1` to `90`
+- `limit`: `1` to `100`
 - `offset`
-- `assetType`: `all`, `stock`, `etf`
+- `assetType`: `all`, `stock`, or `etf`
 
 ### 3. Enrich Incoming Items
 
-Attach combined market sentiment data to incoming n8n items using a ticker field.
-
-Typical use:
-
-`Google Sheets -> Market Sentiment -> Slack`
+Use this when you already have items coming from Sheets, Airtable, Notion, webhooks, or a Code node.
 
 Inputs:
 
-- `tickerField`: input JSON field that holds the stock ticker
-- `targetField`: where the snapshot should be written back
+- `tickerField`: input field that holds the stock ticker
+- `targetField`: field that will receive the combined snapshot
 - `sources`
 - `days`
-- `includeSources`
+- `includeSources`: include nested per-source breakdowns or not
 
-## Credential
+Typical flow:
 
-The node uses one credential:
+`Google Sheets -> Market Sentiment -> IF / Slack / AI summarizer`
 
-- `API Key`
-- `Base URL` (defaults to `https://api.adanos.org`)
+## Output shape
 
-## Example output
-
-Combined snapshot shape:
+Combined snapshot example:
 
 ```json
 {
   "ticker": "AAPL",
-  "companyName": "Apple Inc.",
-  "averageBuzz": 68.4,
-  "averageBullishPct": 61.5,
-  "averageBearishPct": 18.5,
-  "averageSentimentScore": 0.27,
+  "companyName": "Apple Inc",
+  "averageBuzz": 36.73,
+  "averageBullishPct": 63.5,
+  "averageBearishPct": 15,
+  "averageSentimentScore": 0.16,
   "coverage": 3,
-  "sourceAlignment": "aligned_bullish",
+  "sourceAlignment": "divergent",
   "sources": {
-    "reddit": {
-      "sourceLabel": "Reddit",
-      "buzzScore": 72.1,
-      "bullishPct": 64,
-      "activity": 218,
+    "news": {
+      "sourceLabel": "Finance News",
+      "buzzScore": 43.9,
+      "bullishPct": 80,
+      "activity": 25,
       "activityLabel": "mentions",
-      "trend": "rising"
+      "trend": "stable"
+    },
+    "x": {
+      "sourceLabel": "X.com",
+      "buzzScore": 66.3,
+      "bullishPct": 47,
+      "activity": 287,
+      "activityLabel": "mentions",
+      "trend": "falling"
     }
   }
 }
 ```
+
+Enriched item example:
+
+```json
+{
+  "symbol": "NVDA",
+  "marketSentiment": {
+    "averageBuzz": 38.8,
+    "averageBullishPct": 59.5,
+    "coverage": 3,
+    "sourceAlignment": "mixed"
+  }
+}
+```
+
+## Import-ready example workflows
+
+These are the fastest way to smoke-test the node inside a real n8n instance:
+
+- [Manual snapshot validation](./examples/manual-snapshot-validation.workflow.json)
+- [Manual enrichment validation](./examples/manual-enrichment-validation.workflow.json)
+
+More workflow templates:
+
+- [Daily market recap](./examples/daily-market-recap.workflow.json)
+- [Watchlist enrichment](./examples/watchlist-enrichment.workflow.json)
+- [Trending alert](./examples/trending-alert.workflow.json)
+
+After import, select your `Adanos API` credential on the `Market Sentiment` node and run the workflow.
+
+## Local runtime validation
+
+This package was validated inside a real Docker n8n instance on `2026-03-29`.
+
+Validated paths:
+
+- node installs as a community node
+- credential loads in the running n8n server
+- `Manual Snapshot Validation` runs in the editor
+- `Manual Enrichment Validation` returns `4` enriched watchlist items in the editor output
+
+Practical note:
+
+- editor/manual execution in the running n8n server works
+- standalone `n8n execute --id ...` can hit a credential/license-state path in some local environments, so use the editor flow for smoke tests
 
 ## Local development
 
@@ -115,8 +179,4 @@ npm run typecheck
 npm run build
 ```
 
-## Example workflows
-
-- [Daily market recap](./examples/daily-market-recap.workflow.json)
-- [Watchlist enrichment](./examples/watchlist-enrichment.workflow.json)
-- [Trending alert](./examples/trending-alert.workflow.json)
+Release and submission notes live in [docs/RELEASE_CHECKLIST.md](./docs/RELEASE_CHECKLIST.md).

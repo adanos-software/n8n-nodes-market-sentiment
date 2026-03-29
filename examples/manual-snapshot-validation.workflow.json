@@ -1,0 +1,45 @@
+{
+  "name": "Manual Snapshot Validation",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "1",
+      "name": "When clicking \"Test workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [260, 300]
+    },
+    {
+      "parameters": {
+        "operation": "getStockSnapshot",
+        "tickers": "AAPL,NVDA,TSLA,AMD",
+        "sources": [
+          "reddit",
+          "x",
+          "news",
+          "polymarket"
+        ],
+        "days": 7,
+        "outputMode": "combined"
+      },
+      "id": "2",
+      "name": "Market Sentiment",
+      "type": "n8n-nodes-market-sentiment.marketSentiment",
+      "typeVersion": 1,
+      "position": [540, 300]
+    }
+  ],
+  "connections": {
+    "When clicking \"Test workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Market Sentiment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

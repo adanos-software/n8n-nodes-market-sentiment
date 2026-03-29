@@ -9,6 +9,9 @@ const packageJson = JSON.parse(
 	name: string;
 	n8n: { credentials: string[]; nodes: string[] };
 	scripts: Record<string, string>;
+	dependencies?: Record<string, string>;
+	keywords: string[];
+	main: string;
 };
 
 describe('package metadata', () => {
@@ -28,5 +31,13 @@ describe('package metadata', () => {
 
 	it('uses dist/index.js as package entry point', () => {
 		expect(packageJson.main).toBe('dist/index.js');
+	});
+
+	it('ships without runtime dependencies', () => {
+		expect(packageJson.dependencies ?? {}).toEqual({});
+	});
+
+	it('declares itself as an n8n community node package', () => {
+		expect(packageJson.keywords).toContain('n8n-community-node-package');
 	});
 });
