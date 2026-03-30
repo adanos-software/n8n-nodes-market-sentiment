@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-market-sentiment",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "n8n community node for Adanos market sentiment data",
   "license": "MIT",
   "homepage": "https://adanos.org",

@@ -1,4 +1,9 @@
-import type { ICredentialType, INodeProperties } from 'n8n-workflow';
+import type {
+	IAuthenticateGeneric,
+	ICredentialTestRequest,
+	ICredentialType,
+	INodeProperties,
+} from 'n8n-workflow';
 
 const ADANOS_API_BASE_URL = 'https://api.adanos.org';
 
@@ -23,7 +28,7 @@ export class AdanosApi implements ICredentialType {
 		},
 	];
 
-	authenticate = {
+	authenticate: IAuthenticateGeneric = {
 		type: 'generic' as const,
 		properties: {
 			headers: {
@@ -32,7 +37,7 @@ export class AdanosApi implements ICredentialType {
 		},
 	};
 
-	test = {
+	test: ICredentialTestRequest = {
 		request: {
 			baseURL: ADANOS_API_BASE_URL,
 			url: '/reddit/stocks/v1/health',
