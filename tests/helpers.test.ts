@@ -19,6 +19,7 @@ describe('Market Sentiment helpers', () => {
 	});
 
 	it('extracts rows from stocks and data wrappers', () => {
+		expect(extractStockRows([{ ticker: 'TSLA' }])).toHaveLength(1);
 		expect(extractStockRows({ stocks: [{ ticker: 'AAPL' }] })).toHaveLength(1);
 		expect(extractStockRows({ data: [{ ticker: 'MSFT' }] })).toHaveLength(1);
 		expect(extractStockRows({})).toHaveLength(0);

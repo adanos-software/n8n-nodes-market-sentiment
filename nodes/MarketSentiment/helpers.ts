@@ -88,6 +88,10 @@ export function parseTickerList(rawTickers: string): string[] {
 }
 
 export function extractStockRows(payload: unknown): SourceRow[] {
+	if (Array.isArray(payload)) {
+		return payload;
+	}
+
 	if (!payload || typeof payload !== 'object') {
 		return [];
 	}

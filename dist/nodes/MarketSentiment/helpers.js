@@ -33,6 +33,9 @@ function parseTickerList(rawTickers) {
     return tickers;
 }
 function extractStockRows(payload) {
+    if (Array.isArray(payload)) {
+        return payload;
+    }
     if (!payload || typeof payload !== 'object') {
         return [];
     }
